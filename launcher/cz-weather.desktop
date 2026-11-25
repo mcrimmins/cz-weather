@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=CZ Weather
+Comment=Forecast, climatology, monsoon, fire weather and soundings (Open-Meteo)
+Exec=bin/run-cz-weather
+Terminal=false
+Icon=share/images/cz-weather.png
+Type=Application

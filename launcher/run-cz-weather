@@ -1,0 +1,15 @@
+#!/bin/sh
+# cz-weather launcher wrapper. The .desktop entry uses Terminal=false (no shell), so the
+# framebuffer choice and logging live here, as with zeroSDR's run-zerosdr.
+FB="${LV_LINUX_FBDEV_DEVICE:-/dev/fb_lcd}"
+[ -e "$FB" ] || FB=/dev/fb0
+
+LOGDIR="${HOME:-/tmp}/.cache/cz-weather"
+LOG="$LOGDIR/app.log"
+mkdir -p "$LOGDIR"
+# keep the log small: roll it over past ~1 MB
+if [ -f "$LOG" ] && [ "$(stat -c %s "$LOG" 2>/dev/null || echo 0)" -gt 1000000 ]; then
+    mv "$LOG" "$LOG.1"
+fi
+echo "=== $(date '+%Y-%m-%d %H:%M:%S') start (fb=$FB)" >> "$LOG"
+exec python3 /usr/share/APPLaunch/bin/cz_weather.py --fb "$FB" "$@" >> "$LOG" 2>&1
